@@ -69,10 +69,12 @@ public class Solution {
             }
         }
 
-        while (!pq.isEmpty()) {
+        int cnt = 0;
+        while (cnt != N -1) {
             Edge edge = pq.poll();
             if (union(edge.s, edge.e)) {
                 answer += edge.w;
+                cnt++;
             }
         }
     }
