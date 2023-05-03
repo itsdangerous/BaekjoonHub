@@ -4,13 +4,15 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
+// BJ 20061 : 모노미노도미노2
 public class Main {
+	static final int BOARD_SIZE = 4;
 	static int score = 0;
 	static int[][] cols = {{0}, {0, 1}, {0}};
 	
 	static void removeRow(int[][] board, int row) {
 		for (int i = row; i > 0; i--) {
-			for (int j = 0; j < 4; j++) {
+			for (int j = 0; j < BOARD_SIZE; j++) {
 				board[i][j] = board[i-1][j];
 			}
 		}
@@ -19,13 +21,13 @@ public class Main {
 	}
 	
 	static int getMaximumRow(int[][] board, int col) {
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < BOARD_SIZE; i++) {
 			if (board[i][col] != 0) {
 				return (i - 1);
 			}
 		}
 		
-		return 3;
+		return BOARD_SIZE - 1;
 	}
 	
 	static void moveBlock(int[][] board, int x, int y) {
@@ -33,7 +35,7 @@ public class Main {
 	}
 	
 	static boolean checkRow(int[][] board, int row) {
-		for (int col = 0; col < 4; col++) {
+		for (int col = 0; col < BOARD_SIZE; col++) {
 			if (board[row][col] == 0) {
 				return false;
 			}
@@ -43,49 +45,32 @@ public class Main {
 	}
 	
 	static void process(int[][] board, int t, int x, int y) {
-		//System.out.println();
-		//System.out.println();
-		//System.out.println("t:" + t);
-		//System.out.println("x:" + x);
-		//System.out.println("y:" + y);
-		//System.out.println("before:");
-		//print(board);
-		
-		int minimumRow = 3;
+		int minimumRow = BOARD_SIZE - 1;
 		for (int col : cols[t-1]) {
 			minimumRow = Math.min(getMaximumRow(board, col + y), minimumRow);
 		}
 
 		if (minimumRow < 0) {
-			removeRow(board, 3);
+			removeRow(board, BOARD_SIZE - 1);
 			minimumRow = 0;
 		}
-		
-		//System.out.println("minimumRow:" + minimumRow);
-		//print(board);
-		
+
 		moveBlock(board, minimumRow, y);
 		if (t == 2) {
 			moveBlock(board, minimumRow, y + 1);
 		}
 		
-		//System.out.println("after:");
-		//print(board);
-		
 		if (checkRow(board, minimumRow)) {
 			score++;
 			removeRow(board, minimumRow);
 		}
-		
-		//System.out.println("check:");
-		//print(board);
 	}
 	
 	static int countBlock(int[][] board) {
 		int count = 0;
 		
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
+		for (int i = 0; i < BOARD_SIZE; i++) {
+			for (int j = 0; j < BOARD_SIZE; j++) {
 				if (board[i][j] > 0) {
 					count++;
 				}
@@ -95,19 +80,12 @@ public class Main {
 		return count;
 	}
 	
-	static void print(int[][] board) {
-		System.out.println();
-		for (int i = 0; i < 4; i++) {
-			System.out.println(Arrays.toString(board[i]));
-		}
-	}
-	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
 		
-		int[][] green = new int[4][4];
-		int[][] blue = new int[4][4];
+		int[][] green = new int[BOARD_SIZE][BOARD_SIZE];
+		int[][] blue = new int[BOARD_SIZE][BOARD_SIZE];
 		
 		int N = Integer.parseInt(br.readLine());
 		for (int i = 0; i < N; i++) {
