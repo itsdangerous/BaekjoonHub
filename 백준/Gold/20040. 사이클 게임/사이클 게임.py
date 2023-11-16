@@ -10,10 +10,16 @@ rank = [1 for _ in range(N)]
 
 
 def find(x):
-    while x != p[x]:
-        x = p[x]
+    root = x
+    while root != p[root]:
+        root = p[root]
 
-    return x
+    while x != root:
+        next = p[x]
+        p[x] = root
+        x = next
+
+    return root
 
 
 def union(x, y):
