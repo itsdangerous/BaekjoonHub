@@ -46,40 +46,56 @@ for i in range(N):
         que.appendleft([i, j])
         visited[i][j] = True
         cnt += 1
-        points.append([])
         # bfs
         while que:
             cur_r, cur_c = que.pop()
             if is_aside_sea(cur_r, cur_c):
-                points[cnt].append([cur_r, cur_c])
+                points.append([cur_r, cur_c])
             for dr, dc in directions:
                 nr, nc = cur_r + dr, cur_c + dc
                 if not searchable(nr, nc): continue
                 if visited[nr][nc]: continue
 
-                # 가장자리인 것들을 각 섬별로 모으기
                 if arr[nr][nc] == 0:
-                    # arr[cur_r][cur_c] = cnt +1
+                    arr[cur_r][cur_c] = cnt + 2
                     continue
                 que.appendleft([nr, nc])
                 visited[nr][nc] = True
 
-# print_arr(points)
-INF = 10**9
-ans = INF
+# print_arr(arr)
 
-for a in range(len(points)):
-    for b in range(a + 1, len(points)):
-        for ra, ca in points[a]:
-            for rb, cb in points[b]:
-                d = abs(ra - rb) + abs(ca - cb) - 1
-                if d < ans:
-                    ans = d
-        # 이쯤에서 ans가 0이면 더 줄 수 없으니 빠르게 종료 가능
-        if ans == 0:
-            break
-    if ans == 0:
-        break
+min_d = 200
+for r, c in points:
+    visited = [[False] * N for _ in range(N)]
+    que = deque()
+    que.appendleft([r, c])
+    visited[r][c] = True
+    d = -1
+    while que:
+        len_que = len(que)
+        if d >= min_d: break
+        while len_que > 0:
+            cur_r, cur_c = que.pop()
+            if arr[cur_r][cur_c] != 0 and arr[cur_r][cur_c] != arr[r][c]:
+                min_d = min(min_d, d)
+                # test_arr = copy.deepcopy(arr)
+                # test_arr[r][c] = "*"
+                # test_arr[cur_r][cur_c] = "@"
+                # print_arr(test_arr)
+                # print(f"d: {min_d}")
+                break
+            len_que -= 1
 
-print(ans)
+            for dr, dc in directions:
+                nr, nc = cur_r + dr, cur_c + dc
+                if not searchable(nr ,nc): continue
+                if visited[nr][nc]: continue
+                if arr[nr][nc] == 1: continue
+                que.appendleft([nr, nc])
+                visited[nr][nc] = True
+
+        d += 1
+
+print(min_d)
+
 
