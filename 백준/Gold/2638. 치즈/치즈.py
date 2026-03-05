@@ -60,27 +60,17 @@ def remove_cheese():
     for r, c in removed_cheese:
         arr[r][c] = 9
 
-    return cnt_removed_cheese, removed_cheese
-
+    return cnt_removed_cheese
 
 
 cnt = 0
+
 while sum_cheese > 0:
-    # for i in arr:
-    #     print(i)
-    # print()
     # 외부 공기를 9로 마킹
     mark_air_to_nine()
-    # for i in arr:
-    #     print(i)
-    # print()
     # 2개 이상 외부 공기(9)가 인접한 치즈 찾아서 제거 및 제거된 치즈 개수만큼 전체 치즈 개수 업데이트
-    cnt_removed_cheese, removed_cheese = remove_cheese()
-    # print(removed_cheese)
+    cnt_removed_cheese = remove_cheese()
     sum_cheese -= cnt_removed_cheese
-    # for i in arr:
-    #     print(i)
-    # print()
     # 시간 증가
     cnt += 1
 
